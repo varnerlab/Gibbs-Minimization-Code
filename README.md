@@ -43,7 +43,7 @@ molecular composition in the ``element_array`` array.
 
 ### How do we run a calculation?
 The Gibbs minimization can be run by executing the ``global_gibbs_minimization.jl`` script. In this script you specify the chemical species in your system
-(must match the ``symbol`` records in the ``Database.json`` file), the initial composition of the system (in units of mmol/L),
+(in the ``species_list`` array; each entry must match a ``symbol`` record in the ``Database.json`` file), the initial composition of the system (in units of mmol/L),
 the system volume (in units of L) and the lower and upper bounds for each system species (in units of mmol/L).
 
 The script solves the minimization problem ``number_of_runs`` times, with the best results of the ith calculation serving as the starting point for
