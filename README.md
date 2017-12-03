@@ -26,20 +26,20 @@ in the Julia REPL.
 The Gibbs energy minimization calculation uses thermodynamic data for different chemical species that is stored in the [Database.json](https://github.com/varnerlab/Gibbs-Minimization-Code/blob/master/data/Database.json) file.
 This JSON file has species records of the form:
 
-  {
-    "delta_gibbs_in_kj_mol":"-426.71",
-    "symbol":"glucose",
-    "element_array":{
-      "C":"6",
-      "H":"12",
-      "O":"6",
-      "N":"0",
-      "P":"0"
-    }
+    {
+      "delta_gibbs_in_kj_mol":"-426.71",
+      "symbol":"glucose",
+      "element_array":{
+        "C":"6",
+        "H":"12",
+        "O":"6",
+        "N":"0",
+        "P":"0"
+      }
   }
 
 which holds the Gibbs energy of formation in the ``delta_gibbs_in_kj_mol`` field, and the species symbol in the ``symbol`` field, and the
 molecular composition in the ``element_array`` array.
 
-# How do we run a calculation?
+### How do we run a calculation?
 The Gibbs minimization can be run by executing the ``global_gibbs_minimization.jl`` script.  
