@@ -36,7 +36,7 @@ This JSON file has species records of the form:
         "N":"0",
         "P":"0"
       }
-  }
+    }
 
 which holds the Gibbs energy of formation in the ``delta_gibbs_in_kj_mol`` field, and the species symbol in the ``symbol`` field, and the
 molecular composition in the ``element_array`` array.
