@@ -42,4 +42,11 @@ which holds the Gibbs energy of formation in the ``delta_gibbs_in_kj_mol`` field
 molecular composition in the ``element_array`` array.
 
 ### How do we run a calculation?
-The Gibbs minimization can be run by executing the ``global_gibbs_minimization.jl`` script.  
+The Gibbs minimization can be run by executing the ``global_gibbs_minimization.jl`` script. In this script you specify the chemical species in your system
+(must match the ``symbol`` records in the ``Database.json`` file), the initial composition of the system (in units of mmol/L),
+the system volume (in units of L) and the lower and upper bounds for each system species (in units of mmol/L).
+
+The script solves the minimization problem ``number_of_runs`` times, with the best results of the ith calculation serving as the starting point for
+calculation i+1. At the end of ``number_of_runs`` calculations, the best solutions (and associated error) are written to the ``best_soln_archive.dat`` and
+``best_error_archive.dat`` text files. The species abundance (in units of mmol/L) is written in the first ``number_of_species`` rows
+while the Lagrangian multipliers are written in the remaining entries. Each column is a separate potential solution.
