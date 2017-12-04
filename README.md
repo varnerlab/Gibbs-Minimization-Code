@@ -50,3 +50,26 @@ The script solves the minimization problem ``number_of_runs`` times, with the be
 calculation i+1. At the end of ``number_of_runs`` calculations, the best solutions (and associated error) are written to the ``best_soln_archive.dat`` and
 ``best_error_archive.dat`` text files. The species abundance (in units of mmol/L) is written in the first ``number_of_species`` rows
 while the Lagrangian multipliers are written in the remaining entries. Each column is a separate potential solution.
+
+# How do we check if the solution is ok?
+For the solution to be feasible, the lower and upper bound species constraints, and the elemental balance constraints must be satisfied.
+The lower and upper species constraints will always be satisfied (given the way the calculation is structured).
+To check the violation of the elemental balances, we calculate the elemental residual using the function:
+
+
+      function check_element_balances(soln_array,problem_data_model)
+
+          # get some stuff from the data model -
+          atom_matrix = problem_data_model.atom_matrix
+          total_atom_array = problem_data_model.total_atom_array
+          number_of_species = problem_data_model.number_of_species
+
+          # compute the elemental residual -
+          element_error = atom_matrix*soln_array[1:number_of_species] - total_atom_array
+
+          # 5 x 1 array
+          return transpose(element_error)*element_error
+      end
+
+
+which is called for each solution. The elemental balance constraint violation is returned to the work space in the ``element_error_archive`` array.
