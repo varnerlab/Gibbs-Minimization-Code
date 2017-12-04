@@ -4,6 +4,21 @@ include("Includes.jl")
 VOLUME = 1.186e-13      # volume of cell L
 FACTOR = 1e-12          # convert mmol to fmol
 
+
+function check_element_balances(soln_array,problem_data_model)
+
+    # get some stuff from the data model -
+    atom_matrix = problem_data_model.atom_matrix
+    total_atom_array = problem_data_model.total_atom_array
+    number_of_species = problem_data_model.number_of_species
+
+    # compute the elemental residual -
+    element_error = atom_matrix*soln_array[1:number_of_species] - total_atom_array
+
+    # 5 x 1 array
+    return transpose(element_error)*element_error
+end
+
 function calculate_mole_fraction(state_array::Array{Float64,1})
 
     # compute the total moles -
@@ -45,7 +60,6 @@ function objective_function(parameter_guess,problem_data_model)
     (mole_fraction_array,total_mol) = calculate_mole_fraction(state_array)
 
     # compute the energy balances -
-    size(atom_matrix)
     energy_balances = (1/scaling_factor)*gibbs_energy_array_in_j_mol+log.(e,mole_fraction_array)+(1/scaling_factor)*transpose(atom_matrix)*lambda_array
 
     # compute the mass balances -
@@ -129,8 +143,13 @@ function main(species_list,species_dictionary,
     # call the minimizer -
     (error_archive,parameter_archive) = sa_estimate(objective_function,initial_parameter_guess,problem_data_model)
 
+    # check the element error -
+    min_index = indmin(error_archive)
+    best = parameter_archive[:,min_index]
+    element_error = check_element_balances(best,problem_data_model)
+
     # return -
-    return (error_archive,parameter_archive)
+    return (error_archive,element_error,parameter_archive)
 end
 
 # how many atoms are we balancing over?
@@ -180,6 +199,7 @@ system_temperature_in_kelvin = 298.15
 
 # ok, setup a number of hot starts -
 best_error_archive = Float64[]
+element_error_archive = Float64[]
 best_soln_archive = zeros(number_of_species+number_of_elements,1)
 number_of_runs = 100
 for run_index = 1:number_of_runs
@@ -251,38 +271,38 @@ for run_index = 1:number_of_runs
     # Setup the bounds -
     lower_bound_array = [
 
-        0.8 ;     # "glucose"                                               ;   # 1
-        0.0 ;     # "fructose-6-phosphate"                                  ;   # 2
-        0.033 ;   # "glucose-6-phosphate"                                   ;   # 3
-        0.027 ;   # "atp"                                                   ;   # 4
-        0.0 ;     # "adp"                                                   ;   # 5
+        0.0001  ;    # "glucose"                                               ;   # 1
+        0.00001 ;   # "fructose-6-phosphate"                                  ;   # 2
+        0.00001 ;     # "glucose-6-phosphate"                                   ;   # 3
+        0.00001 ;     # "atp"                                                   ;   # 4
+        0.00001 ;     # "adp"                                                   ;   # 5
 
-        0.0 ;     # "6-phospho-D-gluconate"                                 ;   # 6
-        0.0 ;     # "D-ribulose 5-phosphate"                                ;   # 7
-        0.0 ;     # "5-phospho-alpha-D-ribose-1-diphosphate"                ;   # 8
-        0.0 ;     # "D-xylulose-5-phosphate"                                ;   # 9
-        20.0 ;    # "nicotinamide-adenine-dinucleotide-phosphate"           ;   # 10
+        0.00001 ;     # "6-phospho-D-gluconate"                                 ;   # 6
+        0.00001 ;     # "D-ribulose 5-phosphate"                                ;   # 7
+        0.00001 ;     # "5-phospho-alpha-D-ribose-1-diphosphate"                ;   # 8
+        0.00001 ;     # "D-xylulose-5-phosphate"                                ;   # 9
+        1.0     ;    # "nicotinamide-adenine-dinucleotide-phosphate"           ;   # 10
 
-        10.0 ;    # "nicotinamide-adenine-dinucleotide-phosphate-reduced"   ;   # 11
-        0.0 ;     # "co2"                                                   ;   # 12
-        0.0 ;     # "D-xylulose-5-phosphate"                                ;   # 13
-        0.0 ;     # "alpha-D-Ribose-5-phosphate"                            ;   # 14
-        0.0 ;     # "sedoheptulose-7-phosphate"                             ;   # 15
+        1.2     ;    # "nicotinamide-adenine-dinucleotide-phosphate-reduced"   ;   # 11
+        0.0001  ;     # "co2"                                                   ;   # 12
+        0.00001 ;     # "D-xylulose-5-phosphate"                                ;   # 13
+        0.00001 ;     # "alpha-D-Ribose-5-phosphate"                            ;   # 14
+        0.00001 ;     # "sedoheptulose-7-phosphate"                             ;   # 15
 
-        0.0 ;     # "D-erythrose-4-phosphate"                               ;   # 16
-        0.0 ;     # "D-fructose-1,6-bisphosphate"                           ;   # 17
-        0.0 ;     # "dihydroxyacetone-phosphate"                            ;   # 18
-        0.0 ;     # "3-phospho-D-glyceroyl-phosphate"                       ;   # 19
-        0.0 ;     # "3-phospho-D-glycerate"                                 ;   # 20
+        0.00001 ;     # "D-erythrose-4-phosphate"                               ;   # 16
+        0.00001 ;     # "D-fructose-1,6-bisphosphate"                           ;   # 17
+        0.00001 ;     # "dihydroxyacetone-phosphate"                            ;   # 18
+        0.00001 ;     # "3-phospho-D-glyceroyl-phosphate"                       ;   # 19
+        0.00001 ;     # "3-phospho-D-glycerate"                                 ;   # 20
 
-        0.0 ;     # "D-glycerate-2-phosphate"                               ;   # 21
-        0.0 ;     # "phosphoenolpyruvate"                                   ;   # 22
-        0.0 ;     # "pyruvate"                                              ;   # 23
-        0.0 ;     # "D-lactate"                                             ;   # 24
-        0.0 ;     # "inorganic-phosphate"                                   ;   # 25
-        0.0 ;     # "amp"                                                   ;   # 26
-        0.0 ;     # "water"                                                 ;   # 27
-        0.0 ;     # "glyceraldehyde-3-phosphate"                            ;   # 28
+        0.00001 ;     # "D-glycerate-2-phosphate"                               ;   # 21
+        0.00001 ;     # "phosphoenolpyruvate"                                   ;   # 22
+        0.00001 ;     # "pyruvate"                                              ;   # 23
+        0.00001 ;     # "D-lactate"                                             ;   # 24
+        0.0001 ;     # "inorganic-phosphate"                                   ;   # 25
+        0.00001 ;     # "amp"                                                   ;   # 26
+        0.00001 ;     # "water"                                                 ;   # 27
+        0.00001 ;     # "glyceraldehyde-3-phosphate"                            ;   # 28
 
         -Inf ;    # l-C
         -Inf ;    # l-H
@@ -293,37 +313,37 @@ for run_index = 1:number_of_runs
 
     upper_bound_array = [
 
-        Inf ;       # "glucose"                                               ;   # 1
-        Inf ;       # "fructose-6-phosphate"                                  ;   # 2
-        Inf ;       # "glucose-6-phosphate"                                   ;   # 3
-        Inf ;       # "atp"                                                   ;   # 4
-        Inf ;       # "adp"                                                   ;   # 5
-        Inf ;       # "6-phospho-D-gluconate"                                 ;   # 6
-        Inf ;       # "D-ribulose-5-phosphate"                                ;   # 7
-        Inf ;       # "5-phospho-alpha-D-ribose-1-diphosphate"                ;   # 8
-        Inf ;       # "D-xylulose-5-phosphate"                                ;   # 9
+        100.0 ;       # "glucose"                                               ;   # 1
+        10.0 ;       # "fructose-6-phosphate"                                  ;   # 2
+        10.0 ;       # "glucose-6-phosphate"                                   ;   # 3
+        10.0 ;       # "atp"                                                   ;   # 4
+        10.0 ;       # "adp"                                                   ;   # 5
+        10.0 ;       # "6-phospho-D-gluconate"                                 ;   # 6
+        10.0 ;       # "D-ribulose-5-phosphate"                                ;   # 7
+        10.0 ;       # "5-phospho-alpha-D-ribose-1-diphosphate"                ;   # 8
+        10.0 ;       # "D-xylulose-5-phosphate"                                ;   # 9
         150.0 ;     # "nicotinamide-adenine-dinucleotide-phosphate"           ;   # 10
 
         150.0 ;     # "nicotinamide-adenine-dinucleotide-phosphate-reduced"   ;   # 11
-        Inf ;       # "co2"                                                   ;   # 12
-        Inf ;       # "D-xylulose-5-phosphate"                                ;   # 13
-        Inf ;       # "alpha-D-Ribose-5-phosphate"                            ;   # 14
-        Inf ;       # "sedoheptulose-7-phosphate"                             ;   # 15
+        25.0 ;       # "co2"                                                   ;   # 12
+        10.0 ;       # "D-xylulose-5-phosphate"                                ;   # 13
+        10.0 ;       # "alpha-D-Ribose-5-phosphate"                            ;   # 14
+        10.0 ;       # "sedoheptulose-7-phosphate"                             ;   # 15
 
-        Inf ;       # "D-erythrose-4-phosphate"                               ;   # 16
-        Inf ;       # "D-fructose-1,6-bisphosphate"                           ;   # 17
-        Inf ;       # "dihydroxyacetone-phosphate"                            ;   # 18
-        Inf ;       # "3-phospho-D-glyceroyl-phosphate"                       ;   # 19
-        Inf ;       # "3-phospho-D-glycerate"                                 ;   # 20
+        10.0 ;       # "D-erythrose-4-phosphate"                               ;   # 16
+        10.0 ;       # "D-fructose-1,6-bisphosphate"                           ;   # 17
+        10.0 ;       # "dihydroxyacetone-phosphate"                            ;   # 18
+        10.0 ;       # "3-phospho-D-glyceroyl-phosphate"                       ;   # 19
+        10.0 ;       # "3-phospho-D-glycerate"                                 ;   # 20
 
-        Inf ;       # "D-glycerate-2-phosphate"                               ;   # 21
-        Inf ;       # "phosphoenolpyruvate"                                   ;   # 22
-        Inf ;       # "pyruvate"                                              ;   # 23
-        Inf ;       # "D-lactate"                                             ;   # 24
-        Inf ;       # "inorganic-phosphate"                                   ;   # 25
-        Inf ;       # "amp"                                                   ;   # 26
-        Inf ;       # "water"                                                 ;   # 27
-        Inf ;       # glyceraldehyde-3-phosphate                              ;   # 28
+        10.0 ;       # "D-glycerate-2-phosphate"                               ;   # 21
+        10.0 ;       # "phosphoenolpyruvate"                                   ;   # 22
+        10.0 ;       # "pyruvate"                                              ;   # 23
+        10.0 ;       # "D-lactate"                                             ;   # 24
+        25.0 ;       # "inorganic-phosphate"                                   ;   # 25
+        10.0 ;       # "amp"                                                   ;   # 26
+        100.0 ;       # "water"                                                 ;   # 27
+        10. ;       # glyceraldehyde-3-phosphate                              ;   # 28
 
         Inf ;       # l-C
         Inf ;       # l-H
@@ -333,7 +353,7 @@ for run_index = 1:number_of_runs
     ]
 
     # call main -
-    (error_archive,parameter_archive) = main(species_list,
+    (error_archive,element_error,parameter_archive) = main(species_list,
         species_dictionary,
         initial_composition_dictionary,
         lower_bound_array,
@@ -349,6 +369,10 @@ for run_index = 1:number_of_runs
     push!(best_error_archive,error_archive[min_index])
     best_soln_archive = [best_soln_archive best]
 
+    # grab the element error -
+    push!(element_error_archive,element_error)
+
+    # let the user know what is going on ...
     msg = "Completed $(run_index) of $(number_of_runs) trials ...\n"
     print(msg)
 
@@ -362,4 +386,5 @@ for soln_index = 1:number_of_runs
     best_soln_archive[1:number_of_species,soln_index+1] = (FACTOR/VOLUME)*best_soln_archive[1:number_of_species,soln_index+1]
 end
 
+# dump the *corrected* (mmol/L) values to disk -
 writedlm("best_soln_archive.dat",best_soln_archive[:,2:end])
