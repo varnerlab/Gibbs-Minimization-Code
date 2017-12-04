@@ -51,7 +51,7 @@ calculation i+1. At the end of ``number_of_runs`` calculations, the best solutio
 ``best_error_archive.dat`` text files. The species abundance (in units of mmol/L) is written in the first ``number_of_species`` rows
 while the Lagrangian multipliers are written in the remaining entries. Each column is a separate potential solution.
 
-# How do we check if the solution is ok?
+### How do we check if the solution is ok?
 For the solution to be feasible, the lower and upper bound species constraints, and the elemental balance constraints must be satisfied.
 The lower and upper species constraints will always be satisfied (given the way the calculation is structured).
 To check the violation of the elemental balances, we calculate the elemental residual using the function:
