@@ -136,6 +136,7 @@ function main(species_list,species_dictionary,
     push!(initial_parameter_guess,initial_multiplier_dictionary["N"])
     push!(initial_parameter_guess,initial_multiplier_dictionary["P"])
     push!(initial_parameter_guess,initial_multiplier_dictionary["S"])
+    push!(initial_parameter_guess,initial_multiplier_dictionary["charge"])
 
     # setup the lower and upper bounds -
     problem_data_model.parameter_lower_bound_array = (lower_bound_array)*(VOLUME/FACTOR)
@@ -154,7 +155,7 @@ function main(species_list,species_dictionary,
 end
 
 # how many atoms are we balancing over?
-number_of_elements = 6
+number_of_elements = 7
 
 # specify the metabolites I want to optimize -
 species_list = [
@@ -229,7 +230,8 @@ for run_index = 1:number_of_runs
         initial_multiplier_dictionary["O"] = lambda_array[3]
         initial_multiplier_dictionary["N"] = lambda_array[4]
         initial_multiplier_dictionary["P"] = lambda_array[5]
-        initial_multiplier_dictionary["S"] = lambda_array[5]
+        initial_multiplier_dictionary["S"] = lambda_array[6]
+        initial_multiplier_dictionary["charge"] = lambda_array[7]
     else
 
         # setup the composition -
@@ -270,6 +272,7 @@ for run_index = 1:number_of_runs
         initial_multiplier_dictionary["N"] = 100.0
         initial_multiplier_dictionary["P"] = 100.0
         initial_multiplier_dictionary["S"] = 100.0
+        initial_multiplier_dictionary["charge"] = 100.0
     end
 
 
@@ -316,6 +319,7 @@ for run_index = 1:number_of_runs
         -Inf ;    # l-N
         -Inf ;    # l-P
         -Inf ;    # l-S
+        -Inf ;    # l-charge
     ]
 
     upper_bound_array = [
@@ -359,6 +363,7 @@ for run_index = 1:number_of_runs
         Inf ;       # l-N
         Inf ;       # l-P
         Inf ;       # l-S
+        Inf ;       # l-charge
     ]
 
     # call main -

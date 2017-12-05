@@ -16,6 +16,7 @@ function buildSpeciesDictionary(path_to_species_file::AbstractString)
         # populate -
         species_object.symbol = raw_species_data["symbol"]
         species_object.delta_gibbs_in_kj_mol = parse(Float64,raw_species_data["delta_gibbs_in_kj_mol"])
+        species_object.charge = parse(Float64,raw_species_data["charge"])
 
         # get the element_array -
         species_element_dictionary::Dict{String,Float64} = Dict()
@@ -77,8 +78,8 @@ function buildAtomMatrix(path_to_species_file::AbstractString,species_list::Arra
     # how many species?
     number_of_species = length(species_list)
 
-    # initialize -
-    atom_matrix = zeros(number_of_atoms,number_of_species)
+    # initialize (add an extra row for the charge)
+    atom_matrix = zeros(number_of_atoms+1,number_of_species)
 
     # what is the atom order?
     atom_symbol_array = raw_database_dict["atom_symbol_array"]
@@ -95,6 +96,19 @@ function buildAtomMatrix(path_to_species_file::AbstractString,species_list::Arra
             # fill in -
             atom_matrix[index_outer,index_inner] = element_dictionary[atom_key]
         end
+    end
+
+    # add the charge -
+    for (index_inner,species_key) in enumerate(species_list)
+
+        # Get the species object -
+        species_object = species_dictionary[species_key]
+
+        # get the charge -
+        charge = species_object.charge
+
+        # add it to the *last* row -
+        atom_matrix[end,index_inner] = charge
     end
 
     return atom_matrix

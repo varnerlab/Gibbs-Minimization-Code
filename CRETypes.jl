@@ -4,6 +4,7 @@ mutable struct CRESpecies
     symbol::AbstractString
     delta_gibbs_in_kj_mol::Float64
     element_dictionary::Dict{String,Float64}
+    charge::Float64
 
     function CRESpecies()
         this = new()
