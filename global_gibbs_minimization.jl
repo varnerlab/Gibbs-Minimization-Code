@@ -1,8 +1,8 @@
 include("Includes.jl")
 
 # hard constants -
-VOLUME = 1.186e-13      # volume of cell L
-FACTOR = 1e-12          # convert mmol to fmol
+VOLUME = 1.186e-13        # volume of cell L
+FACTOR = 1e-12          # convert mmol to nmol
 
 
 function check_element_balances(soln_array,problem_data_model)
@@ -129,12 +129,13 @@ function main(species_list,species_dictionary,
         push!(initial_parameter_guess,value)
     end
 
-    # C,H,O,N -
+    # C,H,O,N,S -
     push!(initial_parameter_guess,initial_multiplier_dictionary["C"])
     push!(initial_parameter_guess,initial_multiplier_dictionary["H"])
     push!(initial_parameter_guess,initial_multiplier_dictionary["O"])
     push!(initial_parameter_guess,initial_multiplier_dictionary["N"])
     push!(initial_parameter_guess,initial_multiplier_dictionary["P"])
+    push!(initial_parameter_guess,initial_multiplier_dictionary["S"])
 
     # setup the lower and upper bounds -
     problem_data_model.parameter_lower_bound_array = (lower_bound_array)*(VOLUME/FACTOR)
@@ -153,7 +154,7 @@ function main(species_list,species_dictionary,
 end
 
 # how many atoms are we balancing over?
-number_of_elements = 5
+number_of_elements = 6
 
 # specify the metabolites I want to optimize -
 species_list = [
@@ -170,7 +171,7 @@ species_list = [
     "nicotinamide-adenine-dinucleotide-phosphate-reduced"   ;   # 11
     "co2"                                                   ;   # 12
     "D-xylulose-5-phosphate"                                ;   # 13
-    "alpha-D-Ribose-5-phosphate"                            ;   # 14
+    "alpha-D-ribose-5-phosphate"                            ;   # 14
     "sedoheptulose-7-phosphate"                             ;   # 15
     "D-erythrose-4-phosphate"                               ;   # 16
     "D-fructose-1,6-bisphosphate"                           ;   # 17
@@ -185,6 +186,7 @@ species_list = [
     "amp"                                                   ;   # 26
     "water"                                                 ;   # 27
     "glyceraldehyde-3-phosphate"                            ;   # 28
+    "acetyl-coa"                                            ;   # 29
 ]
 
 # number of states?
@@ -227,6 +229,7 @@ for run_index = 1:number_of_runs
         initial_multiplier_dictionary["O"] = lambda_array[3]
         initial_multiplier_dictionary["N"] = lambda_array[4]
         initial_multiplier_dictionary["P"] = lambda_array[5]
+        initial_multiplier_dictionary["S"] = lambda_array[5]
     else
 
         # setup the composition -
@@ -242,7 +245,7 @@ for run_index = 1:number_of_runs
         initial_composition_dictionary["nicotinamide-adenine-dinucleotide-phosphate"] = 0.075*(VOLUME/FACTOR)
         initial_composition_dictionary["nicotinamide-adenine-dinucleotide-phosphate-reduced"] = 0.075*(VOLUME/FACTOR)
         initial_composition_dictionary["co2"] = 1.2*(VOLUME/FACTOR)
-        initial_composition_dictionary["alpha-D-Ribose-5-phosphate"] = 0.078*(VOLUME/FACTOR)
+        initial_composition_dictionary["alpha-D-ribose-5-phosphate"] = 0.078*(VOLUME/FACTOR)
         initial_composition_dictionary["sedoheptulose-7-phosphate"] =  0.016*(VOLUME/FACTOR)
         initial_composition_dictionary["D-erythrose-4-phosphate"] = 0.064*(VOLUME/FACTOR)
         initial_composition_dictionary["D-fructose-1,6-bisphosphate"] = 0.146*(VOLUME/FACTOR)
@@ -258,6 +261,7 @@ for run_index = 1:number_of_runs
         initial_composition_dictionary["water"] =  0.01*(VOLUME/FACTOR)
         initial_composition_dictionary["D-xylulose-5-phosphate"] = 0.01*(VOLUME/FACTOR)
         initial_composition_dictionary["glyceraldehyde-3-phosphate"] = 0.00405*(VOLUME/FACTOR)
+        initial_composition_dictionary["acetyl-coa"] = 0.00405*(VOLUME/FACTOR)
 
         # setup multiplier -
         initial_multiplier_dictionary["C"] = 100.0
@@ -265,6 +269,7 @@ for run_index = 1:number_of_runs
         initial_multiplier_dictionary["O"] = 100.0
         initial_multiplier_dictionary["N"] = 100.0
         initial_multiplier_dictionary["P"] = 100.0
+        initial_multiplier_dictionary["S"] = 100.0
     end
 
 
@@ -272,10 +277,10 @@ for run_index = 1:number_of_runs
     lower_bound_array = [
 
         0.0001  ;    # "glucose"                                               ;   # 1
-        0.00001 ;   # "fructose-6-phosphate"                                  ;   # 2
-        0.00001 ;     # "glucose-6-phosphate"                                   ;   # 3
-        0.00001 ;     # "atp"                                                   ;   # 4
-        0.00001 ;     # "adp"                                                   ;   # 5
+        0.00001 ;    # "fructose-6-phosphate"                                  ;   # 2
+        0.00001 ;    # "glucose-6-phosphate"                                   ;   # 3
+        0.00001 ;    # "atp"                                                   ;   # 4
+        0.00001 ;    # "adp"                                                   ;   # 5
 
         0.00001 ;     # "6-phospho-D-gluconate"                                 ;   # 6
         0.00001 ;     # "D-ribulose 5-phosphate"                                ;   # 7
@@ -303,12 +308,14 @@ for run_index = 1:number_of_runs
         0.00001 ;     # "amp"                                                   ;   # 26
         0.00001 ;     # "water"                                                 ;   # 27
         0.00001 ;     # "glyceraldehyde-3-phosphate"                            ;   # 28
+        0.00001 ;     # acetyl-coa                                              ;   # 29
 
         -Inf ;    # l-C
         -Inf ;    # l-H
         -Inf ;    # l-O
         -Inf ;    # l-N
         -Inf ;    # l-P
+        -Inf ;    # l-S
     ]
 
     upper_bound_array = [
@@ -343,13 +350,15 @@ for run_index = 1:number_of_runs
         25.0 ;       # "inorganic-phosphate"                                   ;   # 25
         10.0 ;       # "amp"                                                   ;   # 26
         100.0 ;       # "water"                                                 ;   # 27
-        10. ;       # glyceraldehyde-3-phosphate                              ;   # 28
+        10.0 ;       # glyceraldehyde-3-phosphate                              ;   # 28
+        0.00001 ;     # acetyl-coa                                              ;   # 29
 
         Inf ;       # l-C
         Inf ;       # l-H
         Inf ;       # l-O
         Inf ;       # l-N
         Inf ;       # l-P
+        Inf ;       # l-S
     ]
 
     # call main -

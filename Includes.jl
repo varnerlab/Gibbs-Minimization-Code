@@ -1,4 +1,6 @@
 using PyPlot
+using GLPK
+
 
 # my files -
 include("CRETypes.jl")
