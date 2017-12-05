@@ -307,7 +307,7 @@ for run_index = 1:number_of_runs
         0.00001 ;     # "phosphoenolpyruvate"                                   ;   # 22
         0.00001 ;     # "pyruvate"                                              ;   # 23
         0.00001 ;     # "D-lactate"                                             ;   # 24
-        0.0001 ;     # "inorganic-phosphate"                                   ;   # 25
+        0.0001 ;      # "inorganic-phosphate"                                   ;   # 25
         0.00001 ;     # "amp"                                                   ;   # 26
         0.00001 ;     # "water"                                                 ;   # 27
         0.00001 ;     # "glyceraldehyde-3-phosphate"                            ;   # 28
