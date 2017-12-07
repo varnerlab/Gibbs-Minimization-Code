@@ -1,8 +1,8 @@
 include("Includes.jl")
 
 # hard constants -
-VOLUME = 1.186e-13        # volume of cell L
-FACTOR = 1e-12          # convert mmol to nmol
+VOLUME = 15e-6        # volume of cell L
+FACTOR = 1.0          # convert mmol to mol
 
 
 function check_element_balances(soln_array,problem_data_model)
@@ -38,7 +38,7 @@ function objective_function(parameter_guess,problem_data_model)
     # FACTOR = 1e-12
 
     # get data from the problem object J/fmol
-    R_constant = 8.314*(FACTOR/1000)
+    R_constant = 8.314*(1/1000)*(1/1000)
 
     # get stuff from the problem object -
     gibbs_energy_array_in_j_mol = problem_data_model.gibbs_energy_array_in_j_mol
@@ -409,7 +409,8 @@ end
 writedlm("best_error_archive.dat",best_error_archive)
 
 # convert data back to mmol/L
-for soln_index = 1:number_of_runs
+number_of_good_runs = length(best_error_archive)
+for soln_index = 1:number_of_good_runs
     best_soln_archive[1:number_of_species,soln_index+1] = (FACTOR/VOLUME)*best_soln_archive[1:number_of_species,soln_index+1]
 end
 

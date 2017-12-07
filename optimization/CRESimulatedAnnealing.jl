@@ -6,7 +6,7 @@ function sa_estimate(objective_function::Function,
     number_of_parameters = length(initial_parameter_guess)
 
     # setup some problem specific parameters -
-    max_number_of_function_evaluations_per_temp = 1000
+    max_number_of_function_evaluations_per_temp = 100
     max_number_of_temperature_adjustments = 500
     max_number_of_starts = 1
     should_we_continue = true
