@@ -74,6 +74,8 @@ function sa_estimate(objective_function::Function,
         end
     end
 
+    # TODO: We should check to see if we have empty arrays to correct
+
     return (error_archive[:,2:end],parameter_archive[:,2:end])
 end
 

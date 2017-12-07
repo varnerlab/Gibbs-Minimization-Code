@@ -145,13 +145,23 @@ function main(species_list,species_dictionary,
     # call the minimizer -
     (error_archive,parameter_archive) = sa_estimate(objective_function,initial_parameter_guess,problem_data_model)
 
-    # check the element error -
-    min_index = indmin(error_archive)
-    best = parameter_archive[:,min_index]
-    element_error = check_element_balances(best,problem_data_model)
+    # ok, check for empty array
+    # if empty: 0
+    # if not empty: 1
+    exit_flag = 1
+    element_error = Inf
+    if (isempty(error_archive) == true || isempty(parameter_archive) == true)
+        exit_flag = 0
+    else
+        # check the element error -
+        min_index = indmin(error_archive)
+        best = parameter_archive[:,min_index]
+        element_error = check_element_balances(best,problem_data_model)
+    end
+
 
     # return -
-    return (error_archive,element_error,parameter_archive)
+    return (error_archive,element_error,parameter_archive,exit_flag)
 end
 
 # how many atoms are we balancing over?
@@ -367,7 +377,7 @@ for run_index = 1:number_of_runs
     ]
 
     # call main -
-    (error_archive,element_error,parameter_archive) = main(species_list,
+    (error_archive,element_error,parameter_archive,exit_flag) = main(species_list,
         species_dictionary,
         initial_composition_dictionary,
         lower_bound_array,
@@ -375,21 +385,24 @@ for run_index = 1:number_of_runs
         initial_multiplier_dictionary,
         system_temperature_in_kelvin)
 
-    # find the min error -
-    min_index = indmin(error_archive)
-    best = parameter_archive[:,min_index]
-    writedlm("temp.out",best)
 
-    push!(best_error_archive,error_archive[min_index])
-    best_soln_archive = [best_soln_archive best]
+    if (exit_flag == 1)
 
-    # grab the element error -
-    push!(element_error_archive,element_error)
+        # find the min error -
+        min_index = indmin(error_archive)
+        best = parameter_archive[:,min_index]
+        writedlm("temp.out",best)
 
-    # let the user know what is going on ...
-    msg = "Completed $(run_index) of $(number_of_runs) trials ...\n"
-    print(msg)
+        push!(best_error_archive,error_archive[min_index])
+        best_soln_archive = [best_soln_archive best]
 
+        # grab the element error -
+        push!(element_error_archive,element_error)
+
+        # let the user know what is going on ...
+        msg = "Completed $(run_index) of $(number_of_runs) trials ...\n"
+        print(msg)
+    end
 end
 
 # dump to disk -
