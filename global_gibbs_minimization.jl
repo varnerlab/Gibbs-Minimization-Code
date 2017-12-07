@@ -2,7 +2,7 @@ include("Includes.jl")
 
 # hard constants -
 R_constant = 8.314*(1/1000)             # kJ/mol-K
-
+VOLUME = 15e-6
 
 function check_energy_balances(soln_array,problem_data_model)
 
@@ -92,9 +92,12 @@ function objective_function(parameter_guess,problem_data_model)
 
     #@show (norm_energy_balances,norm_mass_balances)
 
+    # compute a sacle factor for the mass balances -
+    mass_balance_scale_factor = 1000
+
     # build error array -
     error_array = [
-        energy_balances ; 10000*mass_balances
+        energy_balances ; mass_balance_scale_factor*mass_balances
     ]
 
     # return -
@@ -202,31 +205,30 @@ species_list = [
     "nicotinamide-adenine-dinucleotide-phosphate"           ;   # 10
     "nicotinamide-adenine-dinucleotide-phosphate-reduced"   ;   # 11
     "co2"                                                   ;   # 12
-    "D-xylulose-5-phosphate"                                ;   # 13
-    "alpha-D-ribose-5-phosphate"                            ;   # 14
-    "sedoheptulose-7-phosphate"                             ;   # 15
-    "D-erythrose-4-phosphate"                               ;   # 16
-    "D-fructose-1,6-bisphosphate"                           ;   # 17
-    "dihydroxyacetone-phosphate"                            ;   # 18
-    "3-phospho-D-glyceroyl-phosphate"                       ;   # 19
-    "3-phospho-D-glycerate"                                 ;   # 20
-    "D-glycerate-2-phosphate"                               ;   # 21
-    "phosphoenolpyruvate"                                   ;   # 22
-    "pyruvate"                                              ;   # 23
-    "D-lactate"                                             ;   # 24
-    "inorganic-phosphate"                                   ;   # 25
-    "amp"                                                   ;   # 26
-    "water"                                                 ;   # 27
-    "glyceraldehyde-3-phosphate"                            ;   # 28
-    "acetyl-coa"                                            ;   # 29
-    "nicotinamide-adenine-dinucleotide"                     ;   # 30
-    "nicotinamide-adenine-dinucleotide-reduced"             ;   # 31
-    "oxoglutarate"                                          ;   # 32
-    "succinyl-CoA"                                          ;   # 33
-    "succinate"                                             ;   # 34
-    "fumarate"                                              ;   # 35
-    "malate"                                                ;   # 36
-    "oxaloacetate"                                          ;   # 37
+    "alpha-D-ribose-5-phosphate"                            ;   # 13
+    "sedoheptulose-7-phosphate"                             ;   # 14
+    "D-erythrose-4-phosphate"                               ;   # 15
+    "D-fructose-1,6-bisphosphate"                           ;   # 16
+    "dihydroxyacetone-phosphate"                            ;   # 17
+    "3-phospho-D-glyceroyl-phosphate"                       ;   # 18
+    "3-phospho-D-glycerate"                                 ;   # 19
+    "D-glycerate-2-phosphate"                               ;   # 20
+    "phosphoenolpyruvate"                                   ;   # 21
+    "pyruvate"                                              ;   # 22
+    "D-lactate"                                             ;   # 23
+    "inorganic-phosphate"                                   ;   # 24
+    "amp"                                                   ;   # 25
+    "water"                                                 ;   # 26
+    "glyceraldehyde-3-phosphate"                            ;   # 27
+    "acetyl-coa"                                            ;   # 28
+    "nicotinamide-adenine-dinucleotide"                     ;   # 29
+    "nicotinamide-adenine-dinucleotide-reduced"             ;   # 30
+    "oxoglutarate"                                          ;   # 31
+    "succinyl-CoA"                                          ;   # 32
+    "succinate"                                             ;   # 33
+    "fumarate"                                              ;   # 34
+    "malate"                                                ;   # 35
+    "oxaloacetate"                                          ;   # 36
 ]
 
 # number of states?
@@ -301,7 +303,6 @@ for run_index = 1:number_of_runs
         initial_composition_dictionary["D-lactate"] =  7.330
         initial_composition_dictionary["amp"] = 0.0831
         initial_composition_dictionary["water"] =  0.01
-        initial_composition_dictionary["D-xylulose-5-phosphate"] = 0.01
         initial_composition_dictionary["glyceraldehyde-3-phosphate"] = 0.00405
         initial_composition_dictionary["acetyl-coa"] = 0.00405
         initial_composition_dictionary["nicotinamide-adenine-dinucleotide"]= 1.0
@@ -341,25 +342,24 @@ for run_index = 1:number_of_runs
 
         1.2     ;     # "nicotinamide-adenine-dinucleotide-phosphate-reduced"   ;   # 11
         0.0001  ;     # "co2"                                                   ;   # 12
-        0.00001 ;     # "D-xylulose-5-phosphate"                                ;   # 13
-        0.00001 ;     # "alpha-D-Ribose-5-phosphate"                            ;   # 14
-        0.00001 ;     # "sedoheptulose-7-phosphate"                             ;   # 15
+        0.00001 ;     # "alpha-D-Ribose-5-phosphate"                            ;   # 13
+        0.00001 ;     # "sedoheptulose-7-phosphate"                             ;   # 14
 
-        0.00001 ;     # "D-erythrose-4-phosphate"                               ;   # 16
-        0.00001 ;     # "D-fructose-1,6-bisphosphate"                           ;   # 17
-        0.00001 ;     # "dihydroxyacetone-phosphate"                            ;   # 18
-        0.00001 ;     # "3-phospho-D-glyceroyl-phosphate"                       ;   # 19
-        0.00001 ;     # "3-phospho-D-glycerate"                                 ;   # 20
+        0.00001 ;     # "D-erythrose-4-phosphate"                               ;   # 15
+        0.00001 ;     # "D-fructose-1,6-bisphosphate"                           ;   # 16
+        0.00001 ;     # "dihydroxyacetone-phosphate"                            ;   # 17
+        0.00001 ;     # "3-phospho-D-glyceroyl-phosphate"                       ;   # 18
+        0.00001 ;     # "3-phospho-D-glycerate"                                 ;   # 19
 
-        0.00001 ;     # "D-glycerate-2-phosphate"                               ;   # 21
-        0.00001 ;     # "phosphoenolpyruvate"                                   ;   # 22
-        0.6005  ;     # "pyruvate"                                              ;   # 23
-        0.733   ;     # "D-lactate"                                             ;   # 24
-        0.0001  ;     # "inorganic-phosphate"                                   ;   # 25
-        0.00831 ;     # "amp"                                                   ;   # 26
-        0.00001 ;     # "water"                                                 ;   # 27
-        0.00001 ;     # "glyceraldehyde-3-phosphate"                            ;   # 28
-        0.00001 ;     # acetyl-coa                                              ;   # 29
+        0.00001 ;     # "D-glycerate-2-phosphate"                               ;   # 20
+        0.00001 ;     # "phosphoenolpyruvate"                                   ;   # 21
+        0.6005  ;     # "pyruvate"                                              ;   # 22
+        0.733   ;     # "D-lactate"                                             ;   # 23
+        0.0001  ;     # "inorganic-phosphate"                                   ;   # 24
+        0.00831 ;     # "amp"                                                   ;   # 25
+        0.00001 ;     # "water"                                                 ;   # 26
+        0.00001 ;     # "glyceraldehyde-3-phosphate"                            ;   # 27
+        0.00001 ;     # acetyl-coa                                              ;   # 28
 
         0.1     ;     # nicotinamide-adenine-dinucleotide
         0.1     ;     # nicotinamide-adenine-dinucleotide-reduced
@@ -394,25 +394,24 @@ for run_index = 1:number_of_runs
 
         150.0   ;       # "nicotinamide-adenine-dinucleotide-phosphate-reduced"   ;   # 11
         25.0    ;       # "co2"                                                   ;   # 12
-        10.0    ;       # "D-xylulose-5-phosphate"                                ;   # 13
-        10.0    ;       # "alpha-D-Ribose-5-phosphate"                            ;   # 14
-        10.0    ;       # "sedoheptulose-7-phosphate"                             ;   # 15
+        10.0    ;       # "alpha-D-Ribose-5-phosphate"                            ;   # 13
+        10.0    ;       # "sedoheptulose-7-phosphate"                             ;   # 14
 
-        10.0    ;       # "D-erythrose-4-phosphate"                               ;   # 16
-        10.0    ;       # "D-fructose-1,6-bisphosphate"                           ;   # 17
-        10.0    ;       # "dihydroxyacetone-phosphate"                            ;   # 18
-        10.0    ;       # "3-phospho-D-glyceroyl-phosphate"                       ;   # 19
-        10.0    ;       # "3-phospho-D-glycerate"                                 ;   # 20
+        10.0    ;       # "D-erythrose-4-phosphate"                               ;   # 15
+        10.0    ;       # "D-fructose-1,6-bisphosphate"                           ;   # 16
+        10.0    ;       # "dihydroxyacetone-phosphate"                            ;   # 17
+        10.0    ;       # "3-phospho-D-glyceroyl-phosphate"                       ;   # 18
+        10.0    ;       # "3-phospho-D-glycerate"                                 ;   # 19
 
-        10.0    ;       # "D-glycerate-2-phosphate"                               ;   # 21
-        10.0    ;       # "phosphoenolpyruvate"                                   ;   # 22
-        60.05   ;       # "pyruvate"                                              ;   # 23
-        73.295  ;       # "D-lactate"                                             ;   # 24
-        25.0    ;       # "inorganic-phosphate"                                   ;   # 25
-        0.8315  ;       # "amp"                                                   ;   # 26
-        100.0   ;       # "water"                                                 ;   # 27
-        10.0    ;       # glyceraldehyde-3-phosphate                              ;   # 28
-        0.00001 ;       # acetyl-coa                                              ;   # 29
+        10.0    ;       # "D-glycerate-2-phosphate"                               ;   # 20
+        10.0    ;       # "phosphoenolpyruvate"                                   ;   # 21
+        60.05   ;       # "pyruvate"                                              ;   # 22
+        73.295  ;       # "D-lactate"                                             ;   # 23
+        25.0    ;       # "inorganic-phosphate"                                   ;   # 24
+        0.8315  ;       # "amp"                                                   ;   # 25
+        100.0   ;       # "water"                                                 ;   # 26
+        10.0    ;       # glyceraldehyde-3-phosphate                              ;   # 27
+        0.00001 ;       # acetyl-coa                                              ;   # 28
 
         100     ;       # nicotinamide-adenine-dinucleotide
         100     ;       # nicotinamide-adenine-dinucleotide-reduced
@@ -470,7 +469,7 @@ writedlm("best_error_archive.dat",best_error_archive)
 # convert data back to mmol/L
 number_of_good_runs = length(best_error_archive)
 for soln_index = 1:number_of_good_runs
-    best_soln_archive[1:number_of_species,soln_index+1] = (FACTOR/VOLUME)*best_soln_archive[1:number_of_species,soln_index+1]
+    best_soln_archive[1:number_of_species,soln_index+1] = best_soln_archive[1:number_of_species,soln_index+1]
 end
 
 # dump the *corrected* (mmol/L) values to disk -
