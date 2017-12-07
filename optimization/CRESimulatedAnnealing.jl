@@ -6,7 +6,7 @@ function sa_estimate(objective_function::Function,
     number_of_parameters = length(initial_parameter_guess)
 
     # setup some problem specific parameters -
-    max_number_of_function_evaluations_per_temp = 100
+    max_number_of_function_evaluations_per_temp = 1000
     max_number_of_temperature_adjustments = 500
     max_number_of_starts = 1
     should_we_continue = true
@@ -101,7 +101,7 @@ function neighbor_function(parameter_array,problem_data_model::CREProblemDataMod
   number_of_parameters = length(parameter_array)
 
   # calculate new parameters -
-  new_parameter_array = parameter_array.*(1+SIGMA*randn(number_of_parameters))
+  new_parameter_array = parameter_array.*(1+SIGMA.*randn(number_of_parameters))
 
   # get the lower and upper bounds from the problem model -
   LOWER_BOUND = problem_data_model.parameter_lower_bound_array

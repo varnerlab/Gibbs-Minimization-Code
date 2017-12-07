@@ -39,15 +39,11 @@ end
 
 function buildGibbsEnergyOfFormationArray(path_to_species_file::AbstractString,species_list::Array{String,1})
 
-    # hard constants -
-    VOLUME = 1.186e-13
-    FACTOR = 1e-12
-
     # build the species_dictionary -
     species_dictionary = buildSpeciesDictionary(path_to_species_file)
 
     # initialize -
-    gibbs_energy_array_in_j_mol::Array{Float64,1} = Float64[]
+    gibbs_energy_array_in_kj_mol::Array{Float64,1} = Float64[]
 
     # iterate through the species, and grab the dG of formation -
     for species_symbol in species_list
@@ -56,12 +52,12 @@ function buildGibbsEnergyOfFormationArray(path_to_species_file::AbstractString,s
         species_object = species_dictionary[species_symbol]
 
         # get dG -
-        value = (FACTOR)*species_object.delta_gibbs_in_kj_mol
-        push!(gibbs_energy_array_in_j_mol,value)
+        value = species_object.delta_gibbs_in_kj_mol
+        push!(gibbs_energy_array_in_kj_mol,value)
 
     end
 
-    return gibbs_energy_array_in_j_mol
+    return gibbs_energy_array_in_kj_mol
 end
 
 function buildAtomMatrix(path_to_species_file::AbstractString,species_list::Array{String,1})

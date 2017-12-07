@@ -49,7 +49,7 @@ mutable struct CREProblemDataModel
 
     atom_matrix::Array{Float64,2}
     total_atom_array::Array{Float64,1}
-    gibbs_energy_array_in_j_mol::Array{Float64,1}
+    gibbs_energy_array_in_kj_mol::Array{Float64,1}
 
     parameter_lower_bound_array::Array{Float64}
     parameter_upper_bound_array::Array{Float64}
