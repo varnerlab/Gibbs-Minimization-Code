@@ -12,6 +12,7 @@
   "species_array":[
     {
       "delta_gibbs_in_kj_mol":"-426.71",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"glucose",
       "charge":"0",
       "element_array":{
@@ -24,7 +25,78 @@
       }
     },
     {
+      "delta_gibbs_in_kj_mol":"-228.71",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
+      "symbol":"N-(L-Arginino)succinate",
+      "charge":"0",
+      "element_array":{
+        "C":"10",
+        "H":"18",
+        "O":"6",
+        "N":"4",
+        "P":"0",
+        "S":"0"
+      }
+    },
+    {
+      "delta_gibbs_in_kj_mol":"38.0",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.1",
+      "symbol":"L-Citrulline",
+      "charge":"0",
+      "element_array":{
+        "C":"6",
+        "H":"13",
+        "O":"3",
+        "N":"3",
+        "P":"0",
+        "S":"0"
+      }
+    },
+    {
+      "delta_gibbs_in_kj_mol":"-471.7",
+      "uncertainty_delta_gibbs_in_kj_mol":"2.5",
+      "symbol":"L-Aspartate",
+      "charge":"0",
+      "element_array":{
+        "C":"4",
+        "H":"7",
+        "O":"4",
+        "N":"1",
+        "P":"0",
+        "S":"0"
+      }
+    },
+    {
+      "delta_gibbs_in_kj_mol":"-1956.1",
+      "uncertainty_delta_gibbs_in_kj_mol":"2.2",
+      "symbol":"Diphosphate",
+      "charge":"0",
+      "element_array":{
+        "C":"0",
+        "H":"4",
+        "O":"7",
+        "N":"0",
+        "P":"2",
+        "S":"0"
+      }
+    },
+    {
+      "delta_gibbs_in_kj_mol":"-536.23",
+      "uncertainty_delta_gibbs_in_kj_mol":"2.3",
+      "symbol":"Fumarate",
+      "charge":"0",
+      "element_array":{
+        "C":"4",
+        "H":"4",
+        "O":"4",
+        "N":"0",
+        "P":"0",
+        "S":"0"
+      }
+    },
+    {
       "delta_gibbs_in_kj_mol":"-1318.92",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"glucose-6-phosphate",
       "charge":"-1",
       "element_array":{
@@ -38,6 +110,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-2097.89",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"atp",
       "charge":"-3",
       "element_array":{
@@ -51,6 +124,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1230.12",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"adp",
       "charge":"-2",
       "element_array":{
@@ -64,6 +138,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1315.74",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"fructose-6-phosphate",
       "charge":"-1",
       "element_array":{
@@ -77,6 +152,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-966.23",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"citrate",
       "charge":"-3",
       "element_array":{
@@ -90,6 +166,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-802.12",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"cis-aconitate",
       "charge":"-1",
       "element_array":{
@@ -103,6 +180,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-959.58",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"isocitrate",
       "charge":"-3",
       "element_array":{
@@ -116,6 +194,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-2021.97",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"6-phospho-D-gluconate",
       "charge":"-2",
       "element_array":{
@@ -129,6 +208,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1651.56",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"D-ribulose-5-phosphate",
       "charge":"-1",
       "element_array":{
@@ -142,6 +222,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-3171.88",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"nicotinamide-adenine-dinucleotide-phosphate",
       "charge":"-2",
       "element_array":{
@@ -155,6 +236,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-3149.47",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"nicotinamide-adenine-dinucleotide-phosphate-reduced",
       "charge":"-3",
       "element_array":{
@@ -168,6 +250,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-386.18",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"co2",
       "charge":"0",
       "element_array":{
@@ -181,6 +264,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1651.56",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"D-xylulose-5-phosphate",
       "charge":"-1",
       "element_array":{
@@ -194,6 +278,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1656.52",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"alpha-D-ribose-5-phosphate",
       "charge":"-1",
       "element_array":{
@@ -207,6 +292,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1962.21",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"sedoheptulose-7-phosphate",
       "charge":"-1",
       "element_array":{
@@ -220,6 +306,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1494.32",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"D-erythrose-4-phosphate",
       "charge":"-1",
       "element_array":{
@@ -233,6 +320,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1338.99",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"glyceraldehyde-3-phosphate",
       "charge":"-1",
       "element_array":{
@@ -246,6 +334,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-2702.80",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"D-fructose-1,6-bisphosphate",
       "charge":"-2",
       "element_array":{
@@ -259,6 +348,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1340.91",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"dihydroxyacetone-phosphate",
       "charge":"-1",
       "element_array":{
@@ -272,6 +362,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-2456.39",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"3-phospho-D-glyceroyl-phosphate",
       "charge":"-2",
       "element_array":{
@@ -285,6 +376,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1555.99",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"3-phospho-D-glycerate",
       "charge":"-2",
       "element_array":{
@@ -298,6 +390,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1551.32",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"D-glycerate-2-phosphate",
       "charge":"-2",
       "element_array":{
@@ -311,6 +404,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1323.48",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"phosphoenolpyruvate",
       "charge":"-2",
       "element_array":{
@@ -324,6 +418,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-473.86",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"pyruvate",
       "charge":"-1",
       "element_array":{
@@ -337,6 +432,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-510.87",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"D-lactate",
       "charge":"-1",
       "element_array":{
@@ -350,6 +446,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1096.08",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"inorganic-phosphate",
       "charge":"-2",
       "element_array":{
@@ -363,6 +460,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-3414.04",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"5-phospho-alpha-D-ribose-1-diphosphate",
       "charge":"-3",
       "element_array":{
@@ -376,6 +474,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-1097.13",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"amp",
       "charge":"-1",
       "element_array":{
@@ -389,6 +488,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-236.81",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"water",
       "charge":"0",
       "element_array":{
@@ -402,6 +502,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-3292.99",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"acetyl-coa",
       "charge":"-3",
       "element_array":{
@@ -415,6 +516,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-2285.31",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"nicotinamide-adenine-dinucleotide",
       "charge":"-1",
       "element_array":{
@@ -428,6 +530,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-2262.90",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"nicotinamide-adenine-dinucleotide-reduced",
       "charge":"-2",
       "element_array":{
@@ -441,6 +544,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-798.69",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"oxoglutarate",
       "charge":"-2",
       "element_array":{
@@ -454,6 +558,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-3617.83",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"succinyl-CoA",
       "charge":"-4",
       "element_array":{
@@ -467,6 +572,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-680.37",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"succinate",
       "charge":"-2",
       "element_array":{
@@ -480,6 +586,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-600.73",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"fumarate",
       "charge":"-2",
       "element_array":{
@@ -493,6 +600,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-839.26",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"malate",
       "charge":"-2",
       "element_array":{
@@ -506,6 +614,7 @@
     },
     {
       "delta_gibbs_in_kj_mol":"-298.54",
+      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"oxaloacetate",
       "charge":"-2",
       "element_array":{

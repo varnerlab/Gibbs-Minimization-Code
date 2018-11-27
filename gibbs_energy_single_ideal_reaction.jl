@@ -10,12 +10,12 @@ function main(reaction_id,system_temperature_in_kelvin,species_dictionary,reacti
     gibbs_array::Array{Float64,1} = Float64[]
     stoichiometric_array = Dict()
 
-    # get my reaction -
+    # get my reaction and the associated species -
     reaction_object = reaction_dictionary[reaction_id]
-
-    # calculate the dG for this reaction -
-    delta_gibbs_reaction_in_j_mol = 0.0
     species_array = reaction_object.species_array
+
+    # Build the stoichiometric dictionary -
+    delta_g_rxn_in_j_mol = 0
     for species_reference_object::CRESpeciesReference in species_array
 
         # what species am I looking at?
@@ -25,15 +25,15 @@ function main(reaction_id,system_temperature_in_kelvin,species_dictionary,reacti
         # add -
         stoichiometric_array[species_symbol] = stoichiometric_coefficient
 
-        # lookup the dG -
-        dG_formation = 1000*species_dictionary[species_symbol].delta_gibbs_in_kj_mol
+        # lookup the dG of formation -
+        dG_formation_in_j_mol = 1000*species_dictionary[species_symbol].delta_gibbs_in_kj_mol
 
-        # calculate dG_reaction -
-        delta_gibbs_reaction_in_j_mol = delta_gibbs_reaction_in_j_mol+stoichiometric_coefficient*dG_formation
+        # compute the delta_g_rxn -
+        delta_g_rxn_in_j_mol = delta_g_rxn_in_j_mol + stoichiometric_coefficient*dG_formation_in_j_mol
     end
 
     # scale by RT -
-    scaled_delta_gibbs_reaction = (1/(R_constant*system_temperature_in_kelvin))*delta_gibbs_reaction_in_j_mol
+    scaled_delta_gibbs_reaction = (1/(R_constant*system_temperature_in_kelvin))*delta_g_rxn_in_j_mol
 
     # what is my initial mols total?
     initial_mol_total = 0.0
@@ -68,9 +68,8 @@ function main(reaction_id,system_temperature_in_kelvin,species_dictionary,reacti
     end
 
 
-
     upper_bound = minimum(max_possible_extent_array)
-    extent_of_reaction_array = collect(linspace(0,upper_bound,1000))
+    extent_of_reaction_array = collect(range(0,stop=0.999999*upper_bound,length=100))
 
     # main loop -
     for extent_value in extent_of_reaction_array
@@ -78,7 +77,8 @@ function main(reaction_id,system_temperature_in_kelvin,species_dictionary,reacti
         # initialize -
         final_state_array = Dict()
 
-        summation_term = 0
+        # compute the total number of mols -
+        species_mol_array = Float64[]
         for species_reference_object::CRESpeciesReference in species_array
 
             # what species am I looking at?
@@ -90,14 +90,35 @@ function main(reaction_id,system_temperature_in_kelvin,species_dictionary,reacti
             # what are the moles?
             mol_species_i = (initial_number_of_mol_dictionary[species_symbol]/initial_mol_total)+stoichiometric_coefficient*(extent_value)
 
-            @show (species_symbol,mol_species_i,extent_value)
-
-            # compute the summation term -
-            summation_term = summation_term+mol_species_i*log(e,mol_species_i)
+            # cache this mol value -
+            push!(species_mol_array,mol_species_i)
         end
 
-        # finally ... calculate the total gibbs energy -
-        gibbs_total = scaled_delta_gibbs_reaction*(extent_value)+summation_term
+        # ok, so what is the this total number of mols for this extent?
+        total_number_of_mols = sum(species_mol_array)
+
+        # compute the summation term -
+        summation_term = 0
+        species_index = 1
+        for species_reference_object::CRESpeciesReference in species_array
+
+            # get the dG of formation -
+            species_symbol = species_reference_object.symbol
+
+            # get the mol count for this species -
+            mol_species_i = species_mol_array[species_index]
+
+            # compute the summation term -
+            summation_term = summation_term+mol_species_i*(log((mol_species_i/total_number_of_mols)))
+
+            # update the counter -
+            species_index = species_index + 1
+        end
+
+        # compute the gibbs total -
+        gibbs_total = extent_value*(scaled_delta_gibbs_reaction)+summation_term
+
+        # finally ... cache the gibbs
         push!(gibbs_array,gibbs_total)
     end
 
@@ -115,7 +136,7 @@ reaction_dictionary = buildReactionDictionary("./data/Database.json")
 # What reaction id are we going to look at?
 reaction_id = "86b628c4-2eb3-43be-9014-9ac55f503503"
 initial_number_of_mol_dictionary = Dict()
-initial_number_of_mol_dictionary["glucose-6-phosphate"] = 10.0
+initial_number_of_mol_dictionary["glucose-6-phosphate"] = 1.0
 initial_number_of_mol_dictionary["fructose-6-phosphate"] = 1e-9
 
 # What reaction id are we going to look at?
@@ -125,7 +146,6 @@ initial_number_of_mol_dictionary["fructose-6-phosphate"] = 1e-9
 # initial_number_of_mol_dictionary["atp"] = 1.0
 # initial_number_of_mol_dictionary["glucose-6-phosphate"] = 1e-9
 # initial_number_of_mol_dictionary["adp"] = 1e-9
-
 
 # What is the system T (in K)
 system_temperature_in_kelvin = 298.15
@@ -142,11 +162,16 @@ xlabel(xlabel_text,fontsize=16)
 ylabel("Scaled Gibbs Energy [AU]",fontsize=16)
 
 # find the min point -
-idx_min = indmin(gibbs_array)
+(value,idx_min) = findmin(gibbs_array)
 plot(extent_of_reaction_array[idx_min],gibbs_array[idx_min],"o",linewidth=4.0,mec="k",mfc="w",ms="10")
 
 x_position = 0.01*maximum(extent_of_reaction_array)
 y_position = 0.95*maximum(gibbs_array)
 
-text_label = L"Min scaled extent of reaction $\epsilon^{\prime}$: "*string(extent_of_reaction_array[idx_min])
-text(x_position,y_position,text_label,fontsize=16)
+# label -
+extent_value = @sprintf("%0.3f", extent_of_reaction_array[idx_min])
+text_label = L"Min scaled extent of reaction $\epsilon^{\prime}$: "*extent_value
+text(x_position,y_position,text_label,fontsize=14)
+
+# dump the fig -
+savefig("./figs/G6P-F6P-GibbsMin.pdf")

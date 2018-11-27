@@ -5,7 +5,7 @@ include("Includes.jl")
 function main(reaction_id,system_temperature_in_kelvin,species_dictionary,reaction_dictionary,initial_number_of_mol_dictionary)
 
     # constants -
-    R_constant = 8.314
+    R_constant = 8.314 # units J mol^-1 K^-1
 
     # initialize -
     extent_of_reaction = 0.0
@@ -41,7 +41,7 @@ function main(reaction_id,system_temperature_in_kelvin,species_dictionary,reacti
     K = exp(-1*scaled_delta_gibbs_reaction)
 
     # now estimate the eq extent of reaction -
-    extent_of_reaction_array = collect(linspace(0,0.999,1000))
+    extent_of_reaction_array = collect(range(0,stop=0.999,length=1000))
     error_array::Array{Float64,1} = Float64[]
     for extent_value in extent_of_reaction_array
 
@@ -102,7 +102,7 @@ function main(reaction_id,system_temperature_in_kelvin,species_dictionary,reacti
     end
 
     # sort -
-    idx_zero = find(error_array.>0)
+    idx_zero = findall(error_array.>0)
     eq_extent = extent_of_reaction_array[idx_zero[end]]
 
     return (error_array,extent_of_reaction_array,K,eq_extent)
@@ -131,7 +131,7 @@ initial_number_of_mol_dictionary["fructose-6-phosphate"] = 1e-9
 # initial_number_of_mol_dictionary["adp"] = 1e-9
 
 # What is the system T (in K)
-system_temperature_in_kelvin = 298.15
+system_temperature_in_kelvin = 298.15 # units K
 
 # calculate the equilibrium extent of conversion -
 (error_array,extent_of_reaction_array,K,eq_extent) = main(reaction_id,system_temperature_in_kelvin,species_dictionary,reaction_dictionary,initial_number_of_mol_dictionary)

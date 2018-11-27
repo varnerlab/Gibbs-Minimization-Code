@@ -4,6 +4,27 @@ include("Includes.jl")
 R_constant = 8.314*(1/1000)             # kJ/mol-K
 VOLUME = 15e-6
 
+
+function add_constraints_to_atom_matrix(atom_matrix)
+
+    # get the size of current matrix -
+    (number_of_constraints,number_of_species) = size(atom_matrix)
+
+    # need to extra rows associated with ratios -
+    nad_nadh_ratio = zeros(1,number_of_species)
+    nad_nadh_ratio[1,29] = 1
+    nad_nadh_ratio[1,30] = -19.0 # bionumbers: 105022
+
+    adp_atp_ratio = zeros(1,number_of_species)
+    adp_atp_ratio[1,4] = 1
+    adp_atp_ratio[1,5] = -3.2 # bionumbers: 105021
+
+    # update the atom matrix -
+    atom_matrix = [atom_matrix ; nad_nadh_ratio ; adp_atp_ratio]
+
+    return atom_matrix
+end
+
 function check_energy_balances(soln_array,problem_data_model)
 
     # get stuff from the problem object -
@@ -90,10 +111,8 @@ function objective_function(parameter_guess,problem_data_model)
     norm_energy_balances = norm(energy_balances)
     norm_mass_balances = norm(mass_balances)
 
-    #@show (norm_energy_balances,norm_mass_balances)
-
     # compute a sacle factor for the mass balances -
-    mass_balance_scale_factor = 1000
+    mass_balance_scale_factor = 10000
 
     # build error array -
     error_array = [
@@ -115,6 +134,9 @@ function main(species_list,species_dictionary,
 
     # Build the atom_matrix -
     atom_matrix = buildAtomMatrix("./data/Database.json",species_list)
+
+    # add additional constraints to atom_matrix?
+    atom_matrix = add_constraints_to_atom_matrix(atom_matrix)
 
     # build the energy of formation array -
     gibbs_energy_array_in_kj_mol = buildGibbsEnergyOfFormationArray("./data/Database.json",species_list)
@@ -139,6 +161,8 @@ function main(species_list,species_dictionary,
 
     # initial atom vector (A)
     A = atom_matrix*tmp_mol_array
+
+    # need to hard code ratios -
     problem_data_model.total_atom_array = A
 
     # setup the initial condition -
@@ -149,7 +173,7 @@ function main(species_list,species_dictionary,
         push!(initial_parameter_guess,value)
     end
 
-    # C,H,O,N,S -
+    # C,H,O,N,S, charge, adp/atp ratio, nad/nadh ratio
     push!(initial_parameter_guess,initial_multiplier_dictionary["C"])
     push!(initial_parameter_guess,initial_multiplier_dictionary["H"])
     push!(initial_parameter_guess,initial_multiplier_dictionary["O"])
@@ -157,6 +181,8 @@ function main(species_list,species_dictionary,
     push!(initial_parameter_guess,initial_multiplier_dictionary["P"])
     push!(initial_parameter_guess,initial_multiplier_dictionary["S"])
     push!(initial_parameter_guess,initial_multiplier_dictionary["charge"])
+    push!(initial_parameter_guess,initial_multiplier_dictionary["nad-nadh-ratio"])
+    push!(initial_parameter_guess,initial_multiplier_dictionary["adp-atp-ratio"])
 
     # setup the lower and upper bounds -
     problem_data_model.parameter_lower_bound_array = (lower_bound_array)
@@ -189,7 +215,7 @@ function main(species_list,species_dictionary,
 end
 
 # how many atoms are we balancing over?
-number_of_elements = 7
+number_of_elements = 9
 
 # specify the metabolites I want to optimize -
 species_list = [
@@ -238,6 +264,9 @@ number_of_species = length(species_list)
 species_dictionary = buildSpeciesDictionary("./data/Database.json")
 atom_matrix = buildAtomMatrix("./data/Database.json",species_list)
 
+# add additional constraints to atom_matrix?
+atom_matrix = add_constraints_to_atom_matrix(atom_matrix)
+
 # set the T -
 system_temperature_in_kelvin = 298.15
 
@@ -274,6 +303,8 @@ for run_index = 1:number_of_runs
         initial_multiplier_dictionary["P"] = lambda_array[5]
         initial_multiplier_dictionary["S"] = lambda_array[6]
         initial_multiplier_dictionary["charge"] = lambda_array[7]
+        initial_multiplier_dictionary["nad-nadh-ratio"] = lambda_array[8]
+        initial_multiplier_dictionary["adp-atp-ratio"] = lambda_array[9]
     else
 
         # setup the composition (mmol/L)
@@ -322,6 +353,8 @@ for run_index = 1:number_of_runs
         initial_multiplier_dictionary["P"] = 1000000.0
         initial_multiplier_dictionary["S"] = 1000000.0
         initial_multiplier_dictionary["charge"] = 1000000.0
+        initial_multiplier_dictionary["nad-nadh-ratio"] = 1000000.0
+        initial_multiplier_dictionary["adp-atp-ratio"] = 1000000.0
     end
 
 
@@ -377,6 +410,8 @@ for run_index = 1:number_of_runs
         -Inf ;    # l-P
         -Inf ;    # l-S
         -Inf ;    # l-charge
+        -Inf ;    # l-nad-nadh ratio
+        -Inf ;    # l-adp-atp ratio
     ]
 
     upper_bound_array = [
@@ -429,7 +464,11 @@ for run_index = 1:number_of_runs
         Inf ;       # l-P
         Inf ;       # l-S
         Inf ;       # l-charge
+        Inf ;       # l-nad-nadh ratio
+        Inf ;       # l-adp-atp ratio
     ]
+
+
 
     # call main -
     (error_archive,element_error,energy_balance_value,parameter_archive,exit_flag) = main(species_list,
