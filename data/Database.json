@@ -95,8 +95,8 @@
       }
     },
     {
-      "delta_gibbs_in_kj_mol":"-1318.92",
-      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
+      "delta_gibbs_in_kj_mol":"-1336.3",
+      "uncertainty_delta_gibbs_in_kj_mol":"1.3",
       "symbol":"glucose-6-phosphate",
       "charge":"-1",
       "element_array":{
@@ -137,7 +137,7 @@
       }
     },
     {
-      "delta_gibbs_in_kj_mol":"-1315.74",
+      "delta_gibbs_in_kj_mol":"-1333.8",
       "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"fructose-6-phosphate",
       "charge":"-1",
@@ -151,7 +151,7 @@
       }
     },
     {
-      "delta_gibbs_in_kj_mol":"-966.23",
+      "delta_gibbs_in_kj_mol":"-982.9",
       "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"citrate",
       "charge":"-3",
@@ -179,7 +179,7 @@
       }
     },
     {
-      "delta_gibbs_in_kj_mol":"-959.58",
+      "delta_gibbs_in_kj_mol":"-975.3",
       "uncertainty_delta_gibbs_in_kj_mol":"8.8",
       "symbol":"isocitrate",
       "charge":"-3",
@@ -680,6 +680,66 @@
         "products":[
           {
             "symbol":"isocitrate",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ]
+    },
+    {
+        "id":"5ffef88f-98b1-4918-8188-cb4ac0e9f31c",
+        "symbol":"dihydroxyacetone-phosphate=glyceraldehyde-3-phosphate",
+        "reactants":[
+          {
+            "symbol":"dihydroxyacetone-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ],
+        "products":[
+          {
+            "symbol":"glyceraldehyde-3-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ]
+    },
+    {
+        "id":"5ffef88f-98b1-4918-8188-cb4ac0e9f31d",
+        "symbol":"D-fructose-1,6-bisphosphate=dihydroxyacetone-phosphate+glyceraldehyde-3-phosphate",
+        "reactants":[
+          {
+            "symbol":"D-fructose-1,6-bisphosphate",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ],
+        "products":[
+          {
+            "symbol":"glyceraldehyde-3-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          },
+          {
+            "symbol":"dihydroxyacetone-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ]
+    },
+    {
+        "id":"5ffef88f-98b1-4918-8188-cb4ac0e9f31e",
+        "symbol":"fructose-6-phosphate=D-fructose-1,6-bisphosphate",
+        "reactants":[
+          {
+            "symbol":"fructose-6-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          },
+          {
+            "symbol":"atp",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ],
+        "products":[
+          {
+            "symbol":"D-fructose-1,6-bisphosphate",
+            "stoichiometric_coefficient":"1.0"
+          },
+          {
+            "symbol":"adp",
             "stoichiometric_coefficient":"1.0"
           }
         ]
