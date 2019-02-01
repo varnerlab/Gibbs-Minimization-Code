@@ -2,6 +2,8 @@ using PyPlot
 using JSON
 using Printf
 using Optim
+using RowEchelon
+using LinearAlgebra
 #using GLPK
 
 

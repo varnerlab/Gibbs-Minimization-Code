@@ -319,8 +319,8 @@
       }
     },
     {
-      "delta_gibbs_in_kj_mol":"-1338.99",
-      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
+      "delta_gibbs_in_kj_mol":"-1106.40",
+      "uncertainty_delta_gibbs_in_kj_mol":"1.3",
       "symbol":"glyceraldehyde-3-phosphate",
       "charge":"-1",
       "element_array":{
@@ -347,8 +347,8 @@
       }
     },
     {
-      "delta_gibbs_in_kj_mol":"-1340.91",
-      "uncertainty_delta_gibbs_in_kj_mol":"8.8",
+      "delta_gibbs_in_kj_mol":"-1111.90",
+      "uncertainty_delta_gibbs_in_kj_mol":"1.1",
       "symbol":"dihydroxyacetone-phosphate",
       "charge":"-1",
       "element_array":{
@@ -629,46 +629,6 @@
   ],
   "reaction_array":[
     {
-        "id":"2f8611d4-e3c8-4a89-bea9-f613f5574195",
-        "symbol":"glucose+atp=glucose-6-phosphate+adp",
-        "reactants":[
-          {
-            "symbol":"glucose",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"atp",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ],
-        "products":[
-          {
-            "symbol":"glucose-6-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"adp",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ]
-    },
-    {
-        "id":"86b628c4-2eb3-43be-9014-9ac55f503503",
-        "symbol":"glucose-6-phosphate=fructose-6-phosphate",
-        "reactants":[
-          {
-            "symbol":"glucose-6-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ],
-        "products":[
-          {
-            "symbol":"fructose-6-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ]
-    },
-    {
         "id":"5ffef88f-98b1-4918-8188-cb4ac0e9f31c",
         "symbol":"dihydroxyacetone-phosphate=glyceraldehyde-3-phosphate",
         "reactants":[
@@ -680,158 +640,6 @@
         "products":[
           {
             "symbol":"glyceraldehyde-3-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ]
-    },
-    {
-        "id":"5ffef88f-98b1-4918-8188-cb4ac0e9f31d",
-        "symbol":"D-fructose-1,6-bisphosphate=dihydroxyacetone-phosphate+glyceraldehyde-3-phosphate",
-        "reactants":[
-          {
-            "symbol":"D-fructose-1,6-bisphosphate",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ],
-        "products":[
-          {
-            "symbol":"glyceraldehyde-3-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"dihydroxyacetone-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ]
-    },
-    {
-        "id":"5ffef88f-98b1-4918-8188-cb4ac0e9f31e",
-        "symbol":"fructose-6-phosphate=D-fructose-1,6-bisphosphate",
-        "reactants":[
-          {
-            "symbol":"fructose-6-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"atp",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ],
-        "products":[
-          {
-            "symbol":"D-fructose-1,6-bisphosphate",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"adp",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ]
-    },
-    {
-        "id":"48c25c0f-38e6-4a87-946d-66e65d2b4aca",
-        "symbol":"gap=13bpg",
-        "reactants":[
-          {
-            "symbol":"glyceraldehyde-3-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"nicotinamide-adenine-dinucleotide",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"inorganic-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ],
-        "products":[
-          {
-            "symbol":"3-phospho-D-glyceroyl-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"nicotinamide-adenine-dinucleotide-reduced",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ]
-    },
-    {
-        "id":"5f465729-98a4-4091-b129-29f5d19f141f",
-        "symbol":"13BP=3PG",
-        "reactants":[
-          {
-            "symbol":"3-phospho-D-glyceroyl-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"adp",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ],
-        "products":[
-          {
-            "symbol":"3-phospho-D-glycerate",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"atp",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ]
-    },
-    {
-        "id":"d7bdb8a0-a5c8-4808-a155-44e1cd928c8d",
-        "symbol":"3PG=2PG",
-        "reactants":[
-          {
-            "symbol":"3-phospho-D-glycerate",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ],
-        "products":[
-          {
-            "symbol":"D-glycerate-2-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ]
-    },
-    {
-        "id":"52641938-902f-44e8-8340-30c5db7bedc2",
-        "symbol":"2PG=PEP",
-        "reactants":[
-          {
-            "symbol":"D-glycerate-2-phosphate",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ],
-        "products":[
-          {
-            "symbol":"phosphoenolpyruvate",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ]
-    },
-    {
-        "id":"0c16838e-14d2-4f7c-89ef-7f55dbd6c366",
-        "symbol":"PEP=PYR",
-        "reactants":[
-          {
-            "symbol":"phosphoenolpyruvate",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"adp",
-            "stoichiometric_coefficient":"1.0"
-          }
-        ],
-        "products":[
-          {
-            "symbol":"pyruvate",
-            "stoichiometric_coefficient":"1.0"
-          },
-          {
-            "symbol":"atp",
             "stoichiometric_coefficient":"1.0"
           }
         ]

@@ -88,12 +88,12 @@ function scaled_gibbs_energy_function(extent_array, parameter_dictionary)
     number_of_species = parameter_dictionary["number_of_species"]
     penalty_array = zeros(number_of_species)
     for species_index = 1:number_of_species
-        local_penalty_term = maximum([0,-1*scaled_composition_array[species_index]])
+        local_penalty_term = maximum([0,-1*scaled_composition_array[species_index]])^2
         penalty_array[species_index] = local_penalty_term
     end
 
     # compute the total penalty -
-    total_penalty = 100000*sum(penalty_array)
+    total_penalty = 1000*sum(penalty_array)
 
     # return -
     return total_scaled_gibbs_energy+total_penalty
@@ -102,53 +102,63 @@ end
 function setup()
 
     # Build the species dictionary -
-    species_dictionary = buildSpeciesDictionary("./data/Database.json")
+    species_dictionary = buildSpeciesDictionary("./data/TPI.json")
 
     # Build the reaction dictionary -
-    reaction_dictionary = buildReactionDictionary("./data/Database.json")
+    reaction_dictionary = buildReactionDictionary("./data/TPI.json")
 
     # Setup species symbol array, setup the ICs -
     species_ic_array = [
 
-        "glucose"               10.0        ;   # 1
-        "atp"                   20.0        ;   # 2
-        "glucose-6-phosphate"   0.1         ;   # 3
-        "adp"                   0.1         ;   # 4
-        "fructose-6-phosphate"  0.1         ;   # 5
-        "D-fructose-1,6-bisphosphate"   0.1 ;   # 6
-        "glyceraldehyde-3-phosphate"    0.1 ;   # 7
-        "dihydroxyacetone-phosphate"    0.1 ;   # 8
+        "glucose"               10.0                    ;   # 1
+        "atp"                   20.0                    ;   # 2
+        "glucose-6-phosphate"   0.1                     ;   # 3
+        "adp"                   0.1                     ;   # 4
+        "fructose-6-phosphate"  0.1                     ;   # 5
+        "D-fructose-1,6-bisphosphate"   0.1             ;   # 6
+        "glyceraldehyde-3-phosphate"    0.0             ;   # 7
+        "dihydroxyacetone-phosphate"    10.0            ;   # 8
+        "nicotinamide-adenine-dinucleotide" 10.0        ;   # 9
+        "nicotinamide-adenine-dinucleotide-reduced" 0.1 ;   # 10
+        "inorganic-phosphate" 10.0                      ;   # 11
+        "3-phospho-D-glyceroyl-phosphate"   0.1         ;   # 12
+        "3-phospho-D-glycerate" 0.1                     ;   # 13
+        "D-glycerate-2-phosphate"    0.1                ;   # 14
+        "phosphoenolpyruvate"   0.1                     ;   # 15
+        "pyruvate"  0.1                                 ;   # 16
     ]
 
     species_symbol_array = species_ic_array[:,1]
-    initial_mol_total = sum(species_ic_array[:,2])
-    initial_mol_array = species_ic_array[:,2]
+    initial_mol_total = sum(species_ic_array[:,2])*(1/1000) # convert from mmol to mol
+    initial_mol_array = species_ic_array[:,2]*(1/1000)  # convert from mmol to mol
     number_of_species = length(initial_mol_array)
 
     # order lookup dictionary -
     order_lookup_dictionary = Dict{String,Int}()
-    order_lookup_dictionary["glucose"] = 1
-    order_lookup_dictionary["atp"] = 2
-    order_lookup_dictionary["glucose-6-phosphate"] = 3
-    order_lookup_dictionary["adp"] = 4
-    order_lookup_dictionary["fructose-6-phosphate"] = 5
-    order_lookup_dictionary["D-fructose-1,6-bisphosphate"] = 6
-    order_lookup_dictionary["glyceraldehyde-3-phosphate"] = 7
-    order_lookup_dictionary["dihydroxyacetone-phosphate"] = 8
+    for species_index = 1:number_of_species
+
+        species_symbol = species_symbol_array[species_index]
+        order_lookup_dictionary[species_symbol] = species_index
+    end
+
 
     # What reactions id are we going to look at?
     reaction_key_array = String[]
-    reaction_id = "2f8611d4-e3c8-4a89-bea9-f613f5574195"    # glucose + atp = glucose-6-phosphate + adp
-    push!(reaction_key_array,reaction_id)
-    reaction_id = "86b628c4-2eb3-43be-9014-9ac55f503503"    # glucose-6-phosphate = fructose-6-phosphate
-    push!(reaction_key_array,reaction_id)
-    reaction_id = "5ffef88f-98b1-4918-8188-cb4ac0e9f31e"
-    push!(reaction_key_array,reaction_id)
-    reaction_id = "5ffef88f-98b1-4918-8188-cb4ac0e9f31d"
-    push!(reaction_key_array,reaction_id)
-    reaction_id = "5ffef88f-98b1-4918-8188-cb4ac0e9f31c"
-    push!(reaction_key_array,reaction_id)
+    for (reaction_id,value) in reaction_dictionary
+        push!(reaction_key_array,reaction_id)
+    end
     number_of_reactions = length(reaction_key_array)
+
+    # reaction_id = "2f8611d4-e3c8-4a89-bea9-f613f5574195"    # glucose + atp = glucose-6-phosphate + adp
+    # push!(reaction_key_array,reaction_id)
+    # reaction_id = "86b628c4-2eb3-43be-9014-9ac55f503503"    # glucose-6-phosphate = fructose-6-phosphate
+    # push!(reaction_key_array,reaction_id)
+    # reaction_id = "5ffef88f-98b1-4918-8188-cb4ac0e9f31e"
+    # push!(reaction_key_array,reaction_id)
+    # reaction_id = "5ffef88f-98b1-4918-8188-cb4ac0e9f31d"
+    # push!(reaction_key_array,reaction_id)
+    # reaction_id = "5ffef88f-98b1-4918-8188-cb4ac0e9f31c"
+    # push!(reaction_key_array,reaction_id)
 
     # calculate the delta_g_rxn array -
     scaled_delta_g_rxn_in_j_mol_array = Float64[]
@@ -222,6 +232,7 @@ function setup()
     parameter_dictionary["initial_mol_array"] = initial_mol_array
     parameter_dictionary["number_of_reactions"] = number_of_reactions
     parameter_dictionary["number_of_species"] = number_of_species
+    parameter_dictionary["species_symbol_array"] = species_symbol_array
     return parameter_dictionary
     # =========================================================================================== %
 end
@@ -254,8 +265,26 @@ function main()
     final_scaled_composistion_array = calculate_scaled_composistion_array(scaled_eq_extent_of_reaction,parameter_dictionary)
 
     # return -
-    return (scaled_eq_extent_of_reaction*initial_mol_total,final_scaled_composistion_array*initial_mol_total)
+    return (scaled_eq_extent_of_reaction*initial_mol_total*1000,(final_scaled_composistion_array*initial_mol_total*1000), parameter_dictionary)
     # return parameter_dictionary
 end
 
-(extent,nf) = main()
+(extent,nf,pd) = main();
+
+# create a results table -
+number_of_species = pd["number_of_species"]
+species_symbol_array = pd["species_symbol_array"]
+initial_mol_array = pd["initial_mol_array"]*(1000)
+
+results_table = Any[]
+for species_index = 1:number_of_species
+
+    species_symbol = species_symbol_array[species_index]
+    record = [species_symbol  initial_mol_array[species_index] nf[species_index]]
+    @show record
+
+    push!(results_table,record)
+    # results_table[species_index,1] = species_symbol
+    # results_table[species_index,2] = initial_mol_array[species_index]
+    # results_table[species_index,3] = nf[species_index]
+end
