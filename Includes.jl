@@ -4,6 +4,7 @@ using Printf
 using Optim
 using RowEchelon
 using LinearAlgebra
+using DataFrames
 #using GLPK
 
 

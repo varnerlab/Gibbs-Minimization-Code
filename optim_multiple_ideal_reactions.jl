@@ -93,7 +93,7 @@ function scaled_gibbs_energy_function(extent_array, parameter_dictionary)
     end
 
     # compute the total penalty -
-    total_penalty = 1000*sum(penalty_array)
+    total_penalty = (1e10)*sum(penalty_array)
 
     # return -
     return total_scaled_gibbs_energy+total_penalty
@@ -102,30 +102,30 @@ end
 function setup()
 
     # Build the species dictionary -
-    species_dictionary = buildSpeciesDictionary("./data/TPI.json")
+    species_dictionary = buildSpeciesDictionary("./data/FBA.json")
 
     # Build the reaction dictionary -
-    reaction_dictionary = buildReactionDictionary("./data/TPI.json")
+    reaction_dictionary = buildReactionDictionary("./data/FBA.json")
 
     # Setup species symbol array, setup the ICs -
     species_ic_array = [
 
         "glucose"               10.0                    ;   # 1
         "atp"                   20.0                    ;   # 2
-        "glucose-6-phosphate"   0.1                     ;   # 3
-        "adp"                   0.1                     ;   # 4
-        "fructose-6-phosphate"  0.1                     ;   # 5
-        "D-fructose-1,6-bisphosphate"   0.1             ;   # 6
-        "glyceraldehyde-3-phosphate"    0.0             ;   # 7
-        "dihydroxyacetone-phosphate"    10.0            ;   # 8
-        "nicotinamide-adenine-dinucleotide" 10.0        ;   # 9
-        "nicotinamide-adenine-dinucleotide-reduced" 0.1 ;   # 10
-        "inorganic-phosphate" 10.0                      ;   # 11
-        "3-phospho-D-glyceroyl-phosphate"   0.1         ;   # 12
-        "3-phospho-D-glycerate" 0.1                     ;   # 13
-        "D-glycerate-2-phosphate"    0.1                ;   # 14
-        "phosphoenolpyruvate"   0.1                     ;   # 15
-        "pyruvate"  0.1                                 ;   # 16
+        "glucose-6-phosphate"   0.01                   ;   # 3
+        "adp"                   0.01                   ;   # 4
+        "fructose-6-phosphate"  0.01                   ;   # 5
+        "D-fructose-1,6-bisphosphate"   0.01           ;   # 6
+        "glyceraldehyde-3-phosphate"    0.001           ;   # 7
+        "dihydroxyacetone-phosphate"    0.001           ;   # 8
+        # "nicotinamide-adenine-dinucleotide" 10.0        ;   # 9
+        # "nicotinamide-adenine-dinucleotide-reduced" 0.1 ;   # 10
+        # "inorganic-phosphate" 10.0                      ;   # 11
+        # "3-phospho-D-glyceroyl-phosphate"   0.1         ;   # 12
+        # "3-phospho-D-glycerate" 0.1                     ;   # 13
+        # "D-glycerate-2-phosphate"    0.1                ;   # 14
+        # "phosphoenolpyruvate"   0.1                     ;   # 15
+        # "pyruvate"  0.1                                 ;   # 16
     ]
 
     species_symbol_array = species_ic_array[:,1]
@@ -272,19 +272,26 @@ end
 (extent,nf,pd) = main();
 
 # create a results table -
-number_of_species = pd["number_of_species"]
-species_symbol_array = pd["species_symbol_array"]
-initial_mol_array = pd["initial_mol_array"]*(1000)
+number_of_species = pd["number_of_species"];
+species_symbol_array = pd["species_symbol_array"];
+initial_mol_array = pd["initial_mol_array"]*(1000);
 
-results_table = Any[]
-for species_index = 1:number_of_species
+# initial_mol_array = Float64[]
+# final_mol_array = Float64[]
+# for species_index = 1:number_of_species
 
-    species_symbol = species_symbol_array[species_index]
-    record = [species_symbol  initial_mol_array[species_index] nf[species_index]]
-    @show record
+#     initial_mol_value = initial_mol_array[species_index]
+#     final_mol_value = nf[species_index]
 
-    push!(results_table,record)
-    # results_table[species_index,1] = species_symbol
-    # results_table[species_index,2] = initial_mol_array[species_index]
-    # results_table[species_index,3] = nf[species_index]
-end
+#     push!(initial_mol_array, initial_mol_value)
+#     push!(final_mol_array, final_mol_value)
+# end
+
+delta = (nf - initial_mol_array);
+
+# create a data frame -
+df = DataFrame();
+df.species = species_symbol_array;
+df.initial = initial_mol_array;
+df.delta = (nf - initial_mol_array)
+df.final = nf;

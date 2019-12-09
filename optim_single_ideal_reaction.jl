@@ -189,12 +189,11 @@ function main(reaction_id,system_temperature_in_kelvin,species_dictionary,reacti
         species_index = species_index + 1
     end
 
-    @show delta_g_rxn_in_j_mol,(R_constant*system_temperature_in_kelvin)*log(Q)
-
+    # @show delta_g_rxn_in_j_mol,(R_constant*system_temperature_in_kelvin)*log(Q)
     abs_gibbs_energy = delta_g_rxn_in_j_mol + (R_constant*system_temperature_in_kelvin)*log(Q)
 
     # return -
-    return (eq_extent_of_reaction,abs_gibbs_energy)
+    return (eq_extent_of_reaction,abs_gibbs_energy, initial_mol_total)
 end
 
 
@@ -208,7 +207,7 @@ reaction_dictionary = buildReactionDictionary("./data/Database.json")
 reaction_id = "86b628c4-2eb3-43be-9014-9ac55f503503"
 initial_number_of_mol_dictionary = Dict()
 initial_number_of_mol_dictionary["glucose-6-phosphate"] = 10.0
-initial_number_of_mol_dictionary["fructose-6-phosphate"] = 1.0
+initial_number_of_mol_dictionary["fructose-6-phosphate"] = 0.5
 
 # reaction_id = "5ffef88f-98b1-4918-8188-cb4ac0e9f31b"
 # initial_number_of_mol_dictionary = Dict()
@@ -230,4 +229,4 @@ initial_number_of_mol_dictionary["fructose-6-phosphate"] = 1.0
 system_temperature_in_kelvin = 298.15
 
 # calculate the gibbs as a function of e -
-(extent_of_reaction,gibbs_energy) = main(reaction_id,system_temperature_in_kelvin,species_dictionary,reaction_dictionary,initial_number_of_mol_dictionary)
+(extent_of_reaction,total_delta_gibbs_energy,initial_mol_total) = main(reaction_id,system_temperature_in_kelvin,species_dictionary,reaction_dictionary,initial_number_of_mol_dictionary)

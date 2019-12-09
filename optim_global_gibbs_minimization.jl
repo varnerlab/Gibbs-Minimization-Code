@@ -75,8 +75,6 @@ function scaled_gibbs_energy_function(mol_array, parameter_dictionary)
     # compute the total penalty -
     total_penalty = penalty_weight*sum(penalty_array)
 
-    @show sum(penalty_array)
-
     # return -
     return total_gibbs_energy+total_penalty
 end
@@ -311,6 +309,8 @@ function main()
     # get the lower, and upper_bounds -
     lower_bound_array = parameter_dictionary["lower_bound_array"]
     upper_bound_array = parameter_dictionary["upper_bound_array"]
+
+    @show "ass clown"
 
     # make a call to the optim package -
     result = optimize(objective_function,lower_bound_array,upper_bound_array,initial_mol_array,Fminbox(LBFGS()))

@@ -628,7 +628,71 @@
     }
   ],
   "reaction_array":[
-    {
+      {
+        "id":"2f8611d4-e3c8-4a89-bea9-f613f5574195",
+        "symbol":"glucose+atp=glucose-6-phosphate+adp",
+        "reactants":[
+          {
+            "symbol":"glucose",
+            "stoichiometric_coefficient":"1.0"
+          },
+          {
+            "symbol":"atp",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ],
+        "products":[
+          {
+            "symbol":"glucose-6-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          },
+          {
+            "symbol":"adp",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ]
+      },
+      {
+        "id":"86b628c4-2eb3-43be-9014-9ac55f503503",
+        "symbol":"glucose-6-phosphate=fructose-6-phosphate",
+        "reactants":[
+          {
+            "symbol":"glucose-6-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ],
+        "products":[
+          {
+            "symbol":"fructose-6-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ]
+      },
+      {
+        "id":"5ffef88f-98b1-4918-8188-cb4ac0e9f31e",
+        "symbol":"fructose-6-phosphate=D-fructose-1,6-bisphosphate",
+        "reactants":[
+          {
+            "symbol":"fructose-6-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          },
+          {
+            "symbol":"atp",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ],
+        "products":[
+          {
+            "symbol":"D-fructose-1,6-bisphosphate",
+            "stoichiometric_coefficient":"1.0"
+          },
+          {
+            "symbol":"adp",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ]
+      },
+      {
         "id":"5ffef88f-98b1-4918-8188-cb4ac0e9f31d",
         "symbol":"D-fructose-1,6-bisphosphate=dihydroxyacetone-phosphate+glyceraldehyde-3-phosphate",
         "reactants":[
@@ -647,6 +711,22 @@
             "stoichiometric_coefficient":"1.0"
           }
         ]
-    }
-  ]
+      },
+      {
+        "id":"5ffef88f-98b1-4918-8188-cb4ac0e9f31c",
+        "symbol":"dihydroxyacetone-phosphate=glyceraldehyde-3-phosphate",
+        "reactants":[
+          {
+            "symbol":"dihydroxyacetone-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ],
+        "products":[
+          {
+            "symbol":"glyceraldehyde-3-phosphate",
+            "stoichiometric_coefficient":"1.0"
+          }
+        ]
+      }
+    ]
 }
